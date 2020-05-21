@@ -42,5 +42,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="362dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="11dp"
+        android:fontFamily="@font/allerta"
+        android:text="Jonkheer 1897 is een stalen duikachtbaan, gesitueerd in een zilvermijn in Zuid-Limburg. Het zilver wordt bewaakt door Golden Girls, maar de Jonkheer wil het stelen! Aan wiens kant staat jij? Deze attractie staat in het Stoerland van de Essteling en vertoont veel overeenkomsten met de attractie 'Baron 1898' van een ander pretpark."
+        android:textColor="#FF949f"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/backButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

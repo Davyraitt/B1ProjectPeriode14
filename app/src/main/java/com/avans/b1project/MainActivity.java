@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton wachtrijenButton;
     private ImageButton jonkheerButton;
+    private ImageButton bankjesButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,23 @@ public class MainActivity extends AppCompatActivity {
                 handleJonkheerButton();
             }
         });
+
+        bankjesButton = (ImageButton) findViewById(R.id.bankjesButton);
+        bankjesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleBankjesButton();
+            }
+        });
+
     }
+
+    private void handleBankjesButton() {
+        Intent intent = new Intent(this, Bankjes.class);
+        startActivity(intent);
+    }
+
+
 
     private void handleJonkheerButton() {
         Intent intent = new Intent(this, jonkheerAttractie.class);
