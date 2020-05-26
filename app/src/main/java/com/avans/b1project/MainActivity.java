@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        System.out.println("change");
+
     }
 
     private void handleBankjesButton() {
