@@ -26,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton wachtrijenButton;
     private ImageButton jonkheerButton;
     private ImageButton bankjesButton;
+    private Boolean booleanInJonkheer;
+    private Boolean booleanUitJonkheer;
+    private Boolean booleanInCobra;
+    private Boolean booleanUitCobra;
+
+
+    private int counterJonkheer;
+    private int counterCobra;
     MqttAndroidClient client;
     String topic;
 
@@ -33,7 +41,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        topic = "Android/B1";
+
+        booleanInCobra = false;
+        booleanInJonkheer = false;
+        booleanUitCobra = false;
+        booleanUitJonkheer = false;
+
+        counterJonkheer = 0;
+        counterCobra = 0;
+
         wachtrijenButton = (ImageButton) findViewById(R.id.wachtrijenButton);
         wachtrijenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +112,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connectReader() {
-        String topicTestReading = "Android/B1";
+        String topicBankje1 = "Android/B1/Bankje1";
+        String topicBankje2 = "Android/B1/Bankje2";
+        final String topicInJonkheer = "Android/B1/UltrasoonInJonkheer";
+        final String topicUitJonkheer = "Android/B1/UltrasoonUitJonkheer";
+        final String topicInCobra = "Android/B1/UltrasoonInCobra";
+        final String topicUitCobra = "Android/B1/UltrasoonUitCobra";
+
+
         try {
-            Log.d("tag", "mqtt channel name>>>>>>>>" + topicTestReading);
             Log.d("tag", "client.isConnected()>>>>>>>>" + client.isConnected());
             if (client.isConnected()) {
-                client.subscribe(topicTestReading, 0);
+                client.subscribe(topicBankje1, 0);
+                client.subscribe(topicBankje2, 0);
+                client.subscribe(topicInJonkheer, 0);
+                client.subscribe(topicUitJonkheer, 0);
+                client.subscribe(topicInCobra, 0);
+                client.subscribe(topicUitCobra, 0);
+
                 client.setCallback(new MqttCallback() {
                     @Override
                     public void connectionLost(Throwable cause) {
@@ -109,12 +137,81 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void messageArrived(String topic, MqttMessage message) throws Exception {
-                        System.out.println("We received a message on the following topic:   " + topic);
+//                        System.out.println("We received a message on the following topic:   " + topic);
+//
+//                        System.out.println("The message we received is:      " + receivedmsg);
                         String receivedmsg = new String(message.getPayload());
-                        System.out.println("The message we received is:      " + receivedmsg);
+
+
+                        if (topic.equals(topicInJonkheer)) {
+                            if (receivedmsg.contains("ja") && !booleanInJonkheer) {
+                                counterJonkheer ++;
+                                System.out.println("er is iemand voor de ultrasoon!!!!");
+                                booleanInJonkheer = true;
+                                System.out.println("Counter voor Jonkheer is nu:  " + counterJonkheer + " personen");
+                            }
+
+                            if (receivedmsg.contains("nee")) {
+                                booleanInJonkheer = false;
+                            }
+
+                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                        }
+
+                        if (topic.equals(topicUitJonkheer)) {
+                            if (receivedmsg.contains("ja") && !booleanUitJonkheer) {
+                                if (counterJonkheer > 0) {
+                                counterJonkheer --; }
+                                System.out.println("er is iemand voor de ultrasoon!!!!");
+                                booleanUitJonkheer = true;
+                                System.out.println("Counter voor Jonkheer is nu:  " + counterJonkheer + " personen");
+                            }
+
+                            if (receivedmsg.contains("nee")) {
+                                booleanUitJonkheer = false;
+                            }
+
+                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                        }
+
+
+                        if (topic.equals(topicInCobra)) {
+                            if (receivedmsg.contains("ja") && !booleanInCobra) {
+                                counterCobra ++;
+                                System.out.println("er is iemand voor de ultrasoon!!!!");
+                                booleanInCobra = true;
+                                System.out.println("Counter voor Jonkheer is nu:  " + counterCobra + " personen");
+                            }
+
+                            if (receivedmsg.contains("nee")) {
+                                booleanInCobra = false;
+                            }
+
+                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                        }
+
+                        if (topic.equals(topicUitCobra)) {
+                            if (receivedmsg.contains("ja") && !booleanUitCobra) {
+                                if (counterCobra > 0) {
+                                    counterCobra --;
+                                }
+
+                                System.out.println("er is iemand voor de ultrasoon!!!!");
+                                booleanUitCobra = true;
+                                System.out.println("Counter voor Jonkheer is nu:  " + counterCobra + " personen");
+                            }
+
+                            if (receivedmsg.contains("nee")) {
+                                booleanUitCobra = false;
+                            }
+
+                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                        }
+
+
 
                         if (receivedmsg.contains("Bench1")) {
-                            System.out.println("Contains Bench1!");
+
                             if (receivedmsg.contains("Vrij")) {
                                 Bankjes.setBench1Free();
                             }
@@ -124,17 +221,15 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (receivedmsg.contains("Bench2")) {
-                            System.out.println("Contains Bench2");
+
                             if (receivedmsg.contains("Vrij")) {
                                 Bankjes.setBench2Free();
                             }
                             if (receivedmsg.contains("Bezet")) {
                                 Bankjes.setBench2Busy();
                             }
-                        }
+                        } else {
 
-                        else {
-                            System.out.println("Does not contain bench!");
                         }
                     }
 
@@ -180,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
     private void handleAttractiesButton() {
         Intent intent = new Intent(this, MainActivity.class);
