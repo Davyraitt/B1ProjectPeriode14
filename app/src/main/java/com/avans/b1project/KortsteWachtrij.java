@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -24,8 +25,8 @@ public class KortsteWachtrij extends AppCompatActivity {
     private ImageButton backButton;
     private static ImageView arrowPointer;
     static MqttAndroidClient client;
-    String topic;
-
+    String topic = "Android/B1/Bord";
+    private int qos = 2;
 
 
     @Override
@@ -48,7 +49,7 @@ public class KortsteWachtrij extends AppCompatActivity {
         });
 
 
-        // setting the arrow
+
 
     }
 
@@ -82,6 +83,14 @@ public class KortsteWachtrij extends AppCompatActivity {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     System.out.println("We connected!!");
+                    try {
+                        client.subscribe(topic, qos);
+
+                        // setting the arrow :)
+                        pointToBord(Wachtrijen.waitTimeCobra, Wachtrijen.waitTimeJonkheer);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -97,8 +106,33 @@ public class KortsteWachtrij extends AppCompatActivity {
     }
 
     private static void writeToMQTT(final String topic, final String whatToWrite) {
-        try {
+        if (!client.isConnected()) {
+            System.out.println(":(");
+            Log.d("KortsteWachtrij", "Hij doet niet :(");
+            return;
+        }
+        else {
+            try {
+                client.publish(topic, new MqttMessage(whatToWrite.getBytes()));
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
+
+        /*try {
             int qos = 2; //Ieder bericht moet maar 1x binnenkomen
+
+            *//*if (!client.isConnected()){
+                System.out.println(":(");
+                Log.d("KortsteWachtrij", "Hij doet niet :(")
+                return;
+            }*//*
+
+
             IMqttToken subToken = client.subscribe(topic, qos);
             subToken.setActionCallback(new IMqttActionListener() {
                 @Override
@@ -125,10 +159,17 @@ public class KortsteWachtrij extends AppCompatActivity {
             });
         } catch (MqttException e) {
             e.printStackTrace();
-        }
+        }*/
+
+
     }
 
-    public static void calculateWaitTimes(int waitTimeCobra, int waitTimeJonkheer) {
+    public void calculateWaitTimes() {
+
+    }
+
+
+    private static void pointToBord (int waitTimeCobra, int waitTimeJonkheer){
         if (waitTimeCobra > waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestjonkheer);
             writeToMQTT("Android/B1/Bord", "130");
@@ -138,6 +179,7 @@ public class KortsteWachtrij extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            writeToMQTT("Android/B1/Bord", waitTimeJonkheer + " min");
         }
 
         if (waitTimeCobra < waitTimeJonkheer) {
@@ -150,6 +192,7 @@ public class KortsteWachtrij extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
         }
 
         if (waitTimeCobra == waitTimeJonkheer){
@@ -160,10 +203,9 @@ public class KortsteWachtrij extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
+
+            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
         }
     }
-
-
 
 }

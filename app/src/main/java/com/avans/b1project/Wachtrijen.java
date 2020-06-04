@@ -19,6 +19,9 @@ public class Wachtrijen extends AppCompatActivity {
     private static TextView textViewCobra;
     private static TextView textViewJonkheer;
 
+    public static int waitTimeCobra;
+    public static int waitTimeJonkheer;
+
 
 
 
@@ -78,16 +81,13 @@ public class Wachtrijen extends AppCompatActivity {
     }
 
     public static void calculateWaitTimes (int counterCobra, int counterJonkheer ) {
-        int waitTimeCobra = (counterCobra * 30) / 60 ;
-        int waitTimeJonkheer = (counterJonkheer * 30) / 60 ;
+        waitTimeCobra = (counterCobra * 30) / 60 ;
+        waitTimeJonkheer = (counterJonkheer * 30) / 60 ;
 
         textViewJonkheer.setText( waitTimeJonkheer + " minuten");
         textViewCobra.setText( waitTimeCobra + " minuten");
 
-        KortsteWachtrij.calculateWaitTimes(waitTimeCobra, waitTimeJonkheer);
-
     }
-
 
 }
 
