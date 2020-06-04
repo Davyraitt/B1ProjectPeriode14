@@ -25,7 +25,7 @@ public class KortsteWachtrij extends AppCompatActivity {
     private static ImageView arrowPointer;
     static MqttAndroidClient client;
     String topic;
-    Wachtrijen wachtrijen = new Wachtrijen();
+
 
 
     @Override
@@ -49,7 +49,6 @@ public class KortsteWachtrij extends AppCompatActivity {
 
 
         // setting the arrow
-        pointToBord(wachtrijen.getWaitTimeCobra(), wachtrijen.getWaitTimeJonkheer());
 
     }
 
@@ -129,12 +128,7 @@ public class KortsteWachtrij extends AppCompatActivity {
         }
     }
 
-    public void calculateWaitTimes() {
-
-    }
-
-
-    private static void pointToBord (int waitTimeCobra, int waitTimeJonkheer){
+    public static void calculateWaitTimes(int waitTimeCobra, int waitTimeJonkheer) {
         if (waitTimeCobra > waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestjonkheer);
             writeToMQTT("Android/B1/Bord", "130");
@@ -144,7 +138,6 @@ public class KortsteWachtrij extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            writeToMQTT("Android/B1/Bord", waitTimeJonkheer + " min");
         }
 
         if (waitTimeCobra < waitTimeJonkheer) {
@@ -157,7 +150,6 @@ public class KortsteWachtrij extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
         }
 
         if (waitTimeCobra == waitTimeJonkheer){
@@ -168,9 +160,10 @@ public class KortsteWachtrij extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
+            
         }
     }
+
+
 
 }
