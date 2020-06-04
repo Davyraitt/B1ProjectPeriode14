@@ -25,6 +25,7 @@ public class KortsteWachtrij extends AppCompatActivity {
     private static ImageView arrowPointer;
     static MqttAndroidClient client;
     String topic;
+    Wachtrijen wachtrijen = new Wachtrijen();
 
 
     @Override
@@ -48,7 +49,7 @@ public class KortsteWachtrij extends AppCompatActivity {
 
 
         // setting the arrow
-
+        pointToBord(wachtrijen.getWaitTimeCobra(), wachtrijen.getWaitTimeJonkheer());
 
     }
 
@@ -128,23 +129,48 @@ public class KortsteWachtrij extends AppCompatActivity {
         }
     }
 
-    public static void calculateWaitTimes(int waitTimeCobra, int waitTimeJonkheer) {
+    public void calculateWaitTimes() {
 
+    }
+
+
+    private static void pointToBord (int waitTimeCobra, int waitTimeJonkheer){
         if (waitTimeCobra > waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestjonkheer);
-            writeToMQTT("Android/B1/Servo", "130");
+            writeToMQTT("Android/B1/Bord", "130");
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            writeToMQTT("Android/B1/Bord", waitTimeJonkheer + " min");
         }
 
         if (waitTimeCobra < waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestcobra);
-            writeToMQTT("Android/B1/Servo", "40");
-        } else {
-            arrowPointer.setImageResource(R.drawable.shortestmiddle);
-            writeToMQTT("Android/B1/Servo", "70");
+            writeToMQTT("Android/B1/Bord", "70");
+
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
         }
 
+        if (waitTimeCobra == waitTimeJonkheer){
+            arrowPointer.setImageResource(R.drawable.shortestmiddle);
+            writeToMQTT("Android/B1/Bord", "100");
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+            writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
+        }
     }
-
 
 }
