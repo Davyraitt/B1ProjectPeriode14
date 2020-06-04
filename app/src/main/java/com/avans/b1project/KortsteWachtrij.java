@@ -171,7 +171,7 @@ public class KortsteWachtrij extends AppCompatActivity {
 
     private static void pointToBord (int waitTimeCobra, int waitTimeJonkheer){
         if (waitTimeCobra > waitTimeJonkheer) {
-            arrowPointer.setImageResource(R.drawable.shortestjonkheer);
+            arrowPointer.setImageResource(R.drawable.shortestcobra);
             writeToMQTT("Android/B1/Bord", "130");
             try {
                 Thread.sleep(250);
@@ -183,7 +183,7 @@ public class KortsteWachtrij extends AppCompatActivity {
         }
 
         if (waitTimeCobra < waitTimeJonkheer) {
-            arrowPointer.setImageResource(R.drawable.shortestcobra);
+            arrowPointer.setImageResource(R.drawable.shortestjonkheer);
             writeToMQTT("Android/B1/Bord", "70");
 
             try {
