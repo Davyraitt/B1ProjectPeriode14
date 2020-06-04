@@ -90,33 +90,33 @@ public class Bankjes extends AppCompatActivity {
     }
 
     private void handleBankjeButton1() {
-        bankjeButton1.setSelected(!wachtrijenButton.isPressed());
-        counter1++;
-
-        if (bankjeButton1.isPressed()) {
-            if ((counter1 % 2) == 0)
-                bankjeButton1.setImageResource(R.drawable.benchbusyicon);
-
-            else {
-                bankjeButton1.setImageResource(R.drawable.benchnotbusyicon);
-            }
-
-        }
+//        bankjeButton1.setSelected(!wachtrijenButton.isPressed());
+//        counter1++;
+//
+//        if (bankjeButton1.isPressed()) {
+//            if ((counter1 % 2) == 0)
+//                bankjeButton1.setImageResource(R.drawable.benchbusyicon);
+//
+//            else {
+//                bankjeButton1.setImageResource(R.drawable.benchnotbusyicon);
+//            }
+//
+//        }
     }
 
     private void handleBankjeButton2() {
-        bankjeButton2.setSelected(!wachtrijenButton.isPressed());
-        counter2++;
-
-        if (bankjeButton2.isPressed()) {
-            if ((counter2 % 2) == 0)
-                bankjeButton2.setImageResource(R.drawable.benchbusyicon);
-
-            else {
-                bankjeButton2.setImageResource(R.drawable.benchnotbusyicon);
-            }
-
-        }
+//        bankjeButton2.setSelected(!wachtrijenButton.isPressed());
+//        counter2++;
+//
+//        if (bankjeButton2.isPressed()) {
+//            if ((counter2 % 2) == 0)
+//                bankjeButton2.setImageResource(R.drawable.benchbusyicon);
+//
+//            else {
+//                bankjeButton2.setImageResource(R.drawable.benchnotbusyicon);
+//            }
+//
+//        }
     }
 
     public static void setBench1Busy() {
