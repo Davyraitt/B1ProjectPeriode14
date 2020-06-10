@@ -14,13 +14,14 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".KortsteWachtrij"></activity>
+        <activity android:name=".schermCobra"></activity>
+        <activity android:name=".schermKorsteWachtrij" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
-        <activity android:name=".Bankjes" />
-        <activity android:name=".jonkheerAttractie" />
-        <activity android:name=".Wachtrijen" />
+        <activity android:name=".schermBankjes" />
+        <activity android:name=".schermJonkheer" />
+        <activity android:name=".schermWachtrijen" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

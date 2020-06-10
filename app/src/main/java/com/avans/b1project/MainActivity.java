@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -25,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton wachtrijenButton;
     private ImageButton jonkheerButton;
+    private ImageButton cobraButton;
     private ImageButton bankjesButton;
     private Boolean booleanInJonkheer;
     private Boolean booleanUitJonkheer;
@@ -67,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        cobraButton = (ImageButton) findViewById(R.id.cobraButton);
+        cobraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCobraButton();
+            }
+        });
+
         bankjesButton = (ImageButton) findViewById(R.id.bankjesButton);
         bankjesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
         //Setup the connection to MQTT
         connectToMQTT();
 
+    }
+
+    private void handleCobraButton() {
+        Intent intent = new Intent(this, schermCobra.class);
+        startActivity(intent);
     }
 
     private void connectToMQTT() {
@@ -155,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                 booleanInJonkheer = false;
                             }
 
-                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
                         }
 
                         if (topic.equals(topicUitJonkheer)) {
@@ -171,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                 booleanUitJonkheer = false;
                             }
 
-                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
                         }
 
 
@@ -187,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                                 booleanInCobra = false;
                             }
 
-                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
                         }
 
                         if (topic.equals(topicUitCobra)) {
@@ -205,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                                 booleanUitCobra = false;
                             }
 
-                            Wachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
                         }
 
 
@@ -213,20 +226,20 @@ public class MainActivity extends AppCompatActivity {
                         if (receivedmsg.contains("Bench1")) {
 
                             if (receivedmsg.contains("Vrij")) {
-                                Bankjes.setBench1Free();
+                                schermBankjes.setBench1Free();
                             }
                             if (receivedmsg.contains("Bezet")) {
-                                Bankjes.setBench1Busy();
+                                schermBankjes.setBench1Busy();
                             }
                         }
 
                         if (receivedmsg.contains("Bench2")) {
 
                             if (receivedmsg.contains("Vrij")) {
-                                Bankjes.setBench2Free();
+                                schermBankjes.setBench2Free();
                             }
                             if (receivedmsg.contains("Bezet")) {
-                                Bankjes.setBench2Busy();
+                                schermBankjes.setBench2Busy();
                             }
                         }
                     }
@@ -282,13 +295,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleBankjesButton() {
-        Intent intent = new Intent(this, Bankjes.class);
+        Intent intent = new Intent(this, schermBankjes.class);
         startActivity(intent);
     }
 
 
     private void handleJonkheerButton() {
-        Intent intent = new Intent(this, jonkheerAttractie.class);
+        Intent intent = new Intent(this, schermJonkheer.class);
         startActivity(intent);
 
     }
@@ -301,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        Intent intent = new Intent(this, Wachtrijen.class);
+        Intent intent = new Intent(this, schermWachtrijen.class);
         startActivity(intent);
     }
 
