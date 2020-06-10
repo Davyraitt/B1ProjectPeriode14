@@ -26,7 +26,7 @@ public class jonkheerAttractie extends AppCompatActivity {
 
         //Creating the videoview
         videoView = findViewById(R.id.videoView);
-        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.achtbaan1;
+        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.achtbaan;
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);
 

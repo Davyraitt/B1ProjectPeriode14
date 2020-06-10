@@ -228,8 +228,6 @@ public class MainActivity extends AppCompatActivity {
                             if (receivedmsg.contains("Bezet")) {
                                 Bankjes.setBench2Busy();
                             }
-                        } else {
-
                         }
                     }
 
