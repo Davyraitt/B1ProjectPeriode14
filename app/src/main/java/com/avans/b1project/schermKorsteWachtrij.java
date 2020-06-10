@@ -46,11 +46,7 @@ public class schermKorsteWachtrij extends AppCompatActivity {
         });
 
 
-
-
     }
-
-
 
 
     private void handleBackButton() {
@@ -107,8 +103,7 @@ public class schermKorsteWachtrij extends AppCompatActivity {
             System.out.println(":(");
             Log.d("KortsteWachtrij", "Hij doet niet :(");
             return;
-        }
-        else {
+        } else {
             try {
                 client.publish(topic, new MqttMessage(whatToWrite.getBytes()));
             } catch (MqttException e) {
@@ -117,56 +112,10 @@ public class schermKorsteWachtrij extends AppCompatActivity {
         }
 
 
-
-
-
-        /*try {
-            int qos = 2; //Ieder bericht moet maar 1x binnenkomen
-
-            *//*if (!client.isConnected()){
-                System.out.println(":(");
-                Log.d("KortsteWachtrij", "Hij doet niet :(")
-                return;
-            }*//*
-
-
-            IMqttToken subToken = client.subscribe(topic, qos);
-            subToken.setActionCallback(new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    // Message message = new Message("Bot" , "This is a test message",null,new Date());
-                    String topictestWriting = topic;
-                    String payloadtest = whatToWrite;
-                    byte[] encodedPayload = new byte[0];
-                    try {
-                        encodedPayload = payloadtest.getBytes("UTF-8");
-                        MqttMessage message = new MqttMessage(encodedPayload);
-                        client.publish(topictestWriting, message);
-
-
-                    } catch (UnsupportedEncodingException | MqttException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-
-                }
-            });
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }*/
-
-
-    }
-
-    public void calculateWaitTimes() {
-
     }
 
 
-    private static void pointToBord (int waitTimeCobra, int waitTimeJonkheer){
+    private static void pointToBord(int waitTimeCobra, int waitTimeJonkheer) {
         if (waitTimeCobra > waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestcobra);
             writeToMQTT("Android/B1/Bord", "130");
@@ -192,7 +141,7 @@ public class schermKorsteWachtrij extends AppCompatActivity {
             writeToMQTT("Android/B1/Bord", waitTimeCobra + " min");
         }
 
-        if (waitTimeCobra == waitTimeJonkheer){
+        if (waitTimeCobra == waitTimeJonkheer) {
             arrowPointer.setImageResource(R.drawable.shortestmiddle);
             writeToMQTT("Android/B1/Bord", "100");
             try {

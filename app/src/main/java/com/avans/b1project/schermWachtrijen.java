@@ -19,8 +19,6 @@ public class schermWachtrijen extends AppCompatActivity {
     public static int waitTimeJonkheer;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +27,7 @@ public class schermWachtrijen extends AppCompatActivity {
 
         //Creating all the buttons
         backButton = (ImageButton) findViewById(R.id.backButton);
-        buttonKortsteWachtrij = (ImageButton)  findViewById(R.id.buttonKortsteWachtrij);
+        buttonKortsteWachtrij = (ImageButton) findViewById(R.id.buttonKortsteWachtrij);
 
         //Creating textviews
         textViewCobra = (TextView) findViewById(R.id.textViewCobraCounter);
@@ -76,12 +74,12 @@ public class schermWachtrijen extends AppCompatActivity {
 
     }
 
-    public static void calculateWaitTimes (int counterCobra, int counterJonkheer ) {
-        waitTimeCobra = (counterCobra * 30) / 60 ;
-        waitTimeJonkheer = (counterJonkheer * 30) / 60 ;
+    public static void berekenWachtrijen(int counterCobra, int counterJonkheer) {
+        waitTimeCobra = (counterCobra * 30) / 60;
+        waitTimeJonkheer = (counterJonkheer * 30) / 60;
 
-        textViewJonkheer.setText( waitTimeJonkheer + " minuten");
-        textViewCobra.setText( waitTimeCobra + " minuten");
+        textViewJonkheer.setText(waitTimeJonkheer + " minuten");
+        textViewCobra.setText(waitTimeCobra + " minuten");
 
     }
 

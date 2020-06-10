@@ -42,13 +42,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //standard boolean value is false
         booleanInCobra = false;
         booleanInJonkheer = false;
         booleanUitCobra = false;
         booleanUitJonkheer = false;
 
+
+        //counters for the people entering and leaving the attraction
         counterJonkheer = 0;
         counterCobra = 0;
+
+        //setting the onClicKListeners (what happens when the button is pressed)
 
         wachtrijenButton = (ImageButton) findViewById(R.id.wachtrijenButton);
         wachtrijenButton.setOnClickListener(new View.OnClickListener() {
@@ -94,27 +100,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connectToMQTT() {
-        //MQTT stuff
+        //Generate a randon client ID
         String clientId = MqttClient.generateClientId();
+
+        //Server details
         client = new MqttAndroidClient(this.getApplicationContext(), "tcp://maxwell.bps-software.nl:1883", clientId);
 
         try {
             MqttConnectOptions options = new MqttConnectOptions();
+            //Username and password for the server
             options.setUserName("androidTI");
             options.setPassword("&FN+g$$Qhm7j".toCharArray());
 
+            //Connecting..
             IMqttToken token = client.connect(options);
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    System.out.println("We connected!!");
+                    //When this method is called the connect is succesfull
                     connectWriter();
                     connectReader();
+                    //Connected the writer and reader so we can write and read to the MQTT server
 
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    //Onfailure say we failed
                     System.out.println("Connection failed!!");
                 }
             });
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connectReader() {
+        //Topics we write to...
         String topicBankje1 = "Android/B1/Bankje1";
         String topicBankje2 = "Android/B1/Bankje2";
         final String topicInJonkheer = "Android/B1/UltrasoonInJonkheer";
@@ -136,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Log.d("tag", "client.isConnected()>>>>>>>>" + client.isConnected());
             if (client.isConnected()) {
+                //If we succesfully connected we want to follow the following topics
                 client.subscribe(topicBankje1, 0);
                 client.subscribe(topicBankje2, 0);
                 client.subscribe(topicInJonkheer, 0);
@@ -150,15 +164,16 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void messageArrived(String topic, MqttMessage message) throws Exception {
-//                        System.out.println("We received a message on the following topic:   " + topic);
-//
-//                        System.out.println("The message we received is:      " + receivedmsg);
                         String receivedmsg = new String(message.getPayload());
+                        //Above is the message we received...
+
+                        //Based on the text and topic we received, we should update certain values
 
 
+                        //If the topic equals a certain attraction, we should update the counter of that attraction
                         if (topic.equals(topicInJonkheer)) {
                             if (receivedmsg.contains("ja") && !booleanInJonkheer) {
-                                counterJonkheer ++;
+                                counterJonkheer++;
                                 System.out.println("er is iemand voor de ultrasoon!!!!");
                                 booleanInJonkheer = true;
                                 System.out.println("Counter voor Jonkheer is nu:  " + counterJonkheer + " personen");
@@ -168,13 +183,16 @@ public class MainActivity extends AppCompatActivity {
                                 booleanInJonkheer = false;
                             }
 
-                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.berekenWachtrijen(counterCobra, counterJonkheer);
                         }
 
+
+                        //If the topic equals a certain attraction, we should update the counter of that attraction
                         if (topic.equals(topicUitJonkheer)) {
                             if (receivedmsg.contains("ja") && !booleanUitJonkheer) {
                                 if (counterJonkheer > 0) {
-                                counterJonkheer --; }
+                                    counterJonkheer--;
+                                }
                                 System.out.println("er is iemand voor de ultrasoon!!!!");
                                 booleanUitJonkheer = true;
                                 System.out.println("Counter voor Jonkheer is nu:  " + counterJonkheer + " personen");
@@ -184,13 +202,14 @@ public class MainActivity extends AppCompatActivity {
                                 booleanUitJonkheer = false;
                             }
 
-                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.berekenWachtrijen(counterCobra, counterJonkheer);
                         }
 
 
+                        //If the topic equals a certain attraction, we should update the counter of that attraction
                         if (topic.equals(topicInCobra)) {
                             if (receivedmsg.contains("ja") && !booleanInCobra) {
-                                counterCobra ++;
+                                counterCobra++;
                                 System.out.println("er is iemand voor de ultrasoon!!!!");
                                 booleanInCobra = true;
                                 System.out.println("Counter voor Jonkheer is nu:  " + counterCobra + " personen");
@@ -200,13 +219,16 @@ public class MainActivity extends AppCompatActivity {
                                 booleanInCobra = false;
                             }
 
-                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.berekenWachtrijen(counterCobra, counterJonkheer);
                         }
+
+
+                        //If the topic equals a certain attraction, we should update the counter of that attraction
 
                         if (topic.equals(topicUitCobra)) {
                             if (receivedmsg.contains("ja") && !booleanUitCobra) {
                                 if (counterCobra > 0) {
-                                    counterCobra --;
+                                    counterCobra--;
                                 }
 
                                 System.out.println("er is iemand voor de ultrasoon!!!!");
@@ -218,11 +240,10 @@ public class MainActivity extends AppCompatActivity {
                                 booleanUitCobra = false;
                             }
 
-                            schermWachtrijen.calculateWaitTimes(counterCobra, counterJonkheer);
+                            schermWachtrijen.berekenWachtrijen(counterCobra, counterJonkheer);
                         }
 
-
-
+                        //When a pressure sensor for a bench is called, we want to update the icon of the bench
                         if (receivedmsg.contains("Bench1")) {
 
                             if (receivedmsg.contains("Vrij")) {
@@ -233,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
+                        //When a pressure sensor for a bench is called, we want to update the icon of the bench
                         if (receivedmsg.contains("Bench2")) {
 
                             if (receivedmsg.contains("Vrij")) {
@@ -257,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void connectWriter() {
         try {
-            int qos = 2; //Ieder bericht moet maar 1x binnenkomen
+            int qos = 2; //Each message can only arrive once
             IMqttToken subToken = client.subscribe(topic, qos);
             subToken.setActionCallback(new IMqttActionListener() {
                 @Override
