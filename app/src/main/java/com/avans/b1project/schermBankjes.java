@@ -62,6 +62,14 @@ public class schermBankjes extends AppCompatActivity {
 
 
     private void handleAttractiesButton() {
+        attractiesButton.setSelected(!attractiesButton.isPressed());
+
+
+        if (attractiesButton.isPressed()) {
+            attractiesButton.setImageResource(R.drawable.buttonattractiespressed);
+
+        }
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -84,6 +92,15 @@ public class schermBankjes extends AppCompatActivity {
     }
 
     private void handleWachtrijenButton() {
+        wachtrijenButton.setSelected(!wachtrijenButton.isPressed());
+
+
+        if (wachtrijenButton.isPressed()) {
+            wachtrijenButton.setImageResource(R.drawable.buttonwachtrijenpressed);
+
+        }
+
+
         Intent intent = new Intent(this, schermWachtrijen.class);
         startActivity(intent);
     }

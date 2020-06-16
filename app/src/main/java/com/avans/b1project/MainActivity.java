@@ -94,10 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void handleCobraButton() {
-        Intent intent = new Intent(this, schermCobra.class);
-        startActivity(intent);
-    }
+
 
     private void connectToMQTT() {
         //Generate a randon client ID
@@ -310,19 +307,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void handleAttractiesButton() {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void handleCobraButton() {
+        cobraButton.setSelected(!cobraButton.isPressed());
+
+
+        if (cobraButton.isPressed()) {
+            cobraButton.setImageResource(R.drawable.cobrabuttonpressed);
+
+        }
+
+        Intent intent = new Intent(this, schermCobra.class);
         startActivity(intent);
     }
 
-
     private void handleBankjesButton() {
+        bankjesButton.setSelected(!bankjesButton.isPressed());
+
+
+        if (bankjesButton.isPressed()) {
+            bankjesButton.setImageResource(R.drawable.buttonbankjespressed);
+
+        }
+
         Intent intent = new Intent(this, schermBankjes.class);
         startActivity(intent);
     }
 
 
     private void handleJonkheerButton() {
+        jonkheerButton.setSelected(!jonkheerButton.isPressed());
+
+
+        if (jonkheerButton.isPressed()) {
+            jonkheerButton.setImageResource(R.drawable.jonkheerbuttonpressed);
+
+        }
+
         Intent intent = new Intent(this, schermJonkheer.class);
         startActivity(intent);
 
